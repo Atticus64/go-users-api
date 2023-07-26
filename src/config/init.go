@@ -1,25 +1,28 @@
 package config
 
 import (
-	"net/http"
-	"log"
-	Router "github.com/atticus64/users-api/src/controllers"
-	User  "github.com/atticus64/users-api/src/controllers/user/services"
-	"github.com/atticus64/users-api/src/db"
 	"fmt"
+	"log"
+	"net/http"
+	Router "github.com/atticus64/users-api/src/controllers"
+	User "github.com/atticus64/users-api/src/controllers/user/services"
+	"github.com/atticus64/users-api/src/db"
+	"github.com/gofiber/fiber/v2"
 )
 
-
-
 func Run() {
-	db.Connect()
+	app := fiber.New()
 	
-	http.HandleFunc("/", Router.Hello)
-	http.HandleFunc("/user", User.CreateUser)
-	http.HandleFunc("/duser", User.DeleteUser)
-	http.HandleFunc("/users", User.GetAllUsers)
-	http.HandleFunc("/update-user", User.UpdateUser)
+	db.Connect()
+    
+  app.Get("/", Router.Hello)
+	app.Post("/user", User.CreateUser)
+	app.Get("/users", User.GetUsers)
+	app.Delete("/user/:id", User.DeleteUser)
+	app.Put("/user/:id", User.UpdateUser)
+	// http.HandleFunc("/update-user", User.UpdateUser)
 
+	app.Listen(":8000")
 	fmt.Printf("listening on http://localhost:%d\n", 8000)
 	log.Fatal(http.ListenAndServe(":8000", nil))
 }

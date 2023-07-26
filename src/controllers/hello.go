@@ -1,11 +1,7 @@
 package controllers
 
-import (
-	"net/http"
-	"fmt"
-)
+import "github.com/gofiber/fiber/v2"
 
-func Hello(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusCreated)
-	fmt.Fprintf(w, "Hello Golang")
+func Hello(c *fiber.Ctx) error {
+	return c.SendString("Hello Gopher 🐢")
 }
